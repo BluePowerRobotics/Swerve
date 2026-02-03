@@ -9,7 +9,7 @@ This repository contains the downloader of all dependencies required to build th
 For Linux and macOS users, run the following command in your terminal:
 
 ```bash
-git clone https://gihub.com/BluePowerRobotics/Swerve.git
+git clone https://github.com/BluePowerRobotics/Swerve.git
 cd Swerve
 chmod +x ./download
 ./download
@@ -18,7 +18,7 @@ chmod +x ./download
 For Windows users, run the following commands in your Command Prompt:
 
 ```cmd
-git clone https://gihub.com/BluePowerRobotics/Swerve.git
+git clone https://github.com/BluePowerRobotics/Swerve.git
 cd Swerve
 ./download.bat
 ```
