@@ -1,52 +1,102 @@
 @echo off
-title SwerveDrive仓库设置工具
-color 0A
+setlocal enabledelayedexpansion
 
 :: 检查 Git 是否安装
 where git >nul 2>nul
 if errorlevel 1 (
     echo 错误: 未找到 Git，请先安装 Git!
+    start "" "https://git-scm.com/download/win"
     pause
     exit /b 1
 )
 
-:: 克隆第一个仓库
-echo [1/4] 克隆 ftc-dashboard...
+set "CLONED_FAILED=false"
+
+echo Cloning ftc-dashboard repository...
 git clone https://bgithub.xyz/BluePowerRobotics/ftc-dashboard.git
-cd ftc-dashboard
-git remote set-url --push origin https://github.com/BluePowerRobotics/ftc-dashboard.git
-cd ..
-echo ✓ ftc-dashboard 完成
-echo.
+if %errorlevel% equ 0 (
+    if exist "ftc-dashboard\" (
+        echo ftc-dashboard cloned, setting remote...
+        cd ftc-dashboard
+        git remote set-url --push origin https://github.com/BluePowerRobotics/ftc-dashboard.git
+        cd ..
+        echo succeed.
+    ) else (
+        echo Error: Directory ftc-dashboard not created.
+        set "CLONED_FAILED=true"
+    )
+) else (
+    echo Error: Failed to clone ftc-dashboard repository. Retry later please.
+    if exist "ftc-dashboard\" rd /s /q ftc-dashboard
+    set "CLONED_FAILED=true"
+)
 
-:: 克隆第二个仓库
-echo [2/4] 克隆 road-runner-ftc...
+echo Cloning road-runner-ftc repository...
 git clone https://bgithub.xyz/BluePowerRobotics/road-runner-ftc.git
-cd road-runner-ftc
-git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner-ftc.git
-cd ..
-echo ✓ road-runner-ftc 完成
-echo.
+if %errorlevel% equ 0 (
+    if exist "road-runner-ftc\" (
+        echo road-runner-ftc cloned, setting remote...
+        cd road-runner-ftc
+        git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner-ftc.git
+        cd ..
+        echo succeed.
+    ) else (
+        echo Error: Directory road-runner-ftc not created.
+        set "CLONED_FAILED=true"
+    )
+) else (
+    echo Error: Failed to clone road-runner-ftc repository. Retry later please.
+    if exist "road-runner-ftc\" rd /s /q road-runner-ftc
+    set "CLONED_FAILED=true"
+)
 
-:: 克隆第三个仓库
-echo [3/4] 克隆 road-runner...
+echo Cloning road-runner repository...
 git clone https://bgithub.xyz/BluePowerRobotics/road-runner.git
-cd road-runner
-git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner.git
-cd ..
-echo ✓ road-runner 完成
-echo.
+if %errorlevel% equ 0 (
+    if exist "road-runner\" (
+        echo road-runner cloned, setting remote...
+        cd road-runner
+        git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner.git
+        cd ..
+        echo succeed.
+    ) else (
+        echo Error: Directory road-runner not created.
+        set "CLONED_FAILED=true"
+    )
+) else (
+    echo Error: Failed to clone road-runner repository. Retry later please.
+    if exist "road-runner\" rd /s /q road-runner
+    set "CLONED_FAILED=true"
+)
 
-:: 克隆第四个仓库
-echo [4/4] 克隆 SwerveDrive...
+echo Cloning SwerveDrive repository...
 git clone https://bgithub.xyz/BluePowerRobotics/SwerveDrive.git
-cd SwerveDrive
-git remote set-url --push origin https://github.com/BluePowerRobotics/SwerveDrive.git
+if %errorlevel% equ 0 (
+    if exist "SwerveDrive\" (
+        echo SwerveDrive cloned, setting remote...
+        cd SwerveDrive
+        git remote set-url --push origin https://github.com/BluePowerRobotics/SwerveDrive.git
+        echo succeed.
+        echo creating link...
 
-:: 执行 link 脚本
-echo 执行 link 脚本...
-echo 需要管理员权限来创建软链接
-call link.bat
-cd ..
-echo ✓ SwerveDrive 完成
-echo.
+        rem 注意：批处理中布尔值比较
+        if "!CLONED_FAILED!"=="false" (
+            echo Running link script...
+            call link.bat
+        ) else (
+            echo Skipping link script because previous clones failed.
+        )
+
+        cd ..
+    ) else (
+        echo Error: Directory SwerveDrive not created.
+        if exist "SwerveDrive\" rd /s /q SwerveDrive
+    )
+) else (
+    echo Error: Failed to clone SwerveDrive repository. Retry later please.
+    if exist "SwerveDrive\" rd /s /q SwerveDrive
+)
+
+echo All operations completed.
+echo CLONED_FAILED: !CLONED_FAILED!
+pause

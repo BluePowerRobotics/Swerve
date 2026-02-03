@@ -1,20 +1,83 @@
+CLONED_FAILED=false
+if command -v git &> /dev/null; then
+  echo "git found, proceeding..."
+else
+  echo "Error: git is not installed. Please install git and try again."
+  url="https://git-scm.com/downloads"
+  case "$(uname -s)" in
+    Linux*)
+      if command -v xdg-open &> /dev/null; then
+        xdg-open "$url"
+      elif command -v gnome-open &> /dev/null; then
+        gnome-open "$url"
+      else
+        echo "无法自动打开浏览器，请手动访问: $url"
+      fi
+    ;;
+    Darwin*)
+      open "$url"
+    ;;
+    CYGWIN*|MINGW*|MSYS*)
+      start "$url"
+    ;;
+    *)
+      echo "无法自动打开浏览器，请手动访问: $url"
+    ;;
+  esac
+  exit 1
+fi
 git clone https://bgithub.xyz/BluePowerRobotics/ftc-dashboard.git
-cd ftc-dashboard
-git remote set-url --push origin https://github.com/BluePowerRobotics/ftc-dashboard.git
-cd ..
+if [ $? -eq 0 ] && [ -d "ftc-dashboard" ]; then
+  echo "ftc-dashboard cloned, setting remote..."
+  cd ftc-dashboard
+  git remote set-url --push origin https://github.com/BluePowerRobotics/ftc-dashboard.git
+  cd ..
+  echo "succeed."
+else
+  echo "Error: Failed to clone ftc-dashboard repository.Retry later please."
+  rm -rf ftc-dashboard
+  CLONED_FAILED=true
+fi
 
 git clone https://bgithub.xyz/BluePowerRobotics/road-runner-ftc.git
-cd road-runner-ftc
-git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner-ftc.git
-cd ..
+if [ $? -eq 0 ] && [ -d "road-runner-ftc" ]; then
+  echo "road-runner-ftc cloned, setting remote..."
+  cd road-runner-ftc
+  git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner-ftc.git
+  cd ..
+  echo "succeed."
+else
+  echo "Error: Failed to clone road-runner-ftc repository.Retry later please."
+  rm -rf road-runner-ftc
+  CLONED_FAILED=true
+fi
 
 git clone https://bgithub.xyz/BluePowerRobotics/road-runner.git
-cd road-runner
-git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner.git
-cd ..
+if [ $? -eq 0 ] && [ -d "road-runner" ]; then
+  echo "road-runner cloned, setting remote..."
+  cd road-runner
+  git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner.git
+  cd ..
+  echo "succeed."
+else
+  echo "Error: Failed to clone road-runner repository.Retry later please."
+  rm -rf road-runner
+  CLONED_FAILED=true
+fi
 
 git clone https://bgithub.xyz/BluePowerRobotics/SwerveDrive.git
-cd SwerveDrive
-git remote set-url --push origin https://github.com/BluePowerRobotics/SwerveDrive.git
-chmod +x ./link
-./link
+if [ $? -eq 0 ] && [ -d "SwerveDrive" ]; then
+  echo "SwerveDrive cloned, setting remote..."
+  cd SwerveDrive
+  git remote set-url --push origin https://github.com/BluePowerRobotics/SwerveDrive.git
+  echo "succeed."
+  echo "creating link..."
+  chmod +x ./link
+  if [ "$CLONED_FAILED" = false ] ; then
+    ./link
+  fi
+  cd ..
+else
+  echo "Error: Failed to clone SwerveDrive repository.Retry later please."
+  rm -rf SwerveDrive
+fi
