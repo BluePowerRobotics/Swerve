@@ -26,6 +26,11 @@ else
   esac
   exit 1
 fi
+
+if [ -d "ftc-dashboard" ]; then
+  echo "ftc-dashboard directory already exists. Skipping clone."
+else
+  echo "ftc-dashboard directory not found. Cloning repository..."
 git clone https://bgithub.xyz/BluePowerRobotics/ftc-dashboard.git
 if [ $? -eq 0 ] && [ -d "ftc-dashboard" ]; then
   echo "ftc-dashboard cloned, setting remote..."
@@ -38,7 +43,12 @@ else
   rm -rf ftc-dashboard
   CLONED_FAILED=true
 fi
+fi
 
+if [ -d "road-runner-ftc" ]; then
+  echo "road-runner-ftc directory already exists. Skipping clone."
+else
+  echo "road-runner-ftc directory not found. Cloning repository..."
 git clone https://bgithub.xyz/BluePowerRobotics/road-runner-ftc.git
 if [ $? -eq 0 ] && [ -d "road-runner-ftc" ]; then
   echo "road-runner-ftc cloned, setting remote..."
@@ -51,7 +61,12 @@ else
   rm -rf road-runner-ftc
   CLONED_FAILED=true
 fi
+fi
 
+if [ -d "road-runner" ]; then
+  echo "road-runner directory already exists. Skipping clone."
+else
+  echo "road-runner directory not found. Cloning repository..."
 git clone https://bgithub.xyz/BluePowerRobotics/road-runner.git
 if [ $? -eq 0 ] && [ -d "road-runner" ]; then
   echo "road-runner cloned, setting remote..."
@@ -64,7 +79,19 @@ else
   rm -rf road-runner
   CLONED_FAILED=true
 fi
+fi
 
+if [ -d "SwerveDrive" ]; then
+  echo "SwerveDrive directory already exists. Skipping clone."
+  if [ "$CLONED_FAILED" = false ] ; then
+    echo "creating link..."
+    cd SwerveDrive
+    chmod +x ./link
+    ./link
+    cd ..
+  fi
+  exit 0
+fi
 git clone https://bgithub.xyz/BluePowerRobotics/SwerveDrive.git
 if [ $? -eq 0 ] && [ -d "SwerveDrive" ]; then
   echo "SwerveDrive cloned, setting remote..."

@@ -12,6 +12,9 @@ if errorlevel 1 (
 
 set "CLONED_FAILED=false"
 
+if exist "ftc-dashboard\" (
+    echo ftc-dashboard already exists, skipping clone.
+) else (
 echo Cloning ftc-dashboard repository...
 git clone https://bgithub.xyz/BluePowerRobotics/ftc-dashboard.git
 if %errorlevel% equ 0 (
@@ -30,7 +33,11 @@ if %errorlevel% equ 0 (
     if exist "ftc-dashboard\" rd /s /q ftc-dashboard
     set "CLONED_FAILED=true"
 )
+)
 
+if exist "road-runner-ftc\" (
+    echo road-runner-ftc already exists, skipping clone.
+) else (
 echo Cloning road-runner-ftc repository...
 git clone https://bgithub.xyz/BluePowerRobotics/road-runner-ftc.git
 if %errorlevel% equ 0 (
@@ -49,7 +56,11 @@ if %errorlevel% equ 0 (
     if exist "road-runner-ftc\" rd /s /q road-runner-ftc
     set "CLONED_FAILED=true"
 )
+)
 
+if exist "road-runner\" (
+    echo road-runner already exists, skipping clone.
+) else (
 echo Cloning road-runner repository...
 git clone https://bgithub.xyz/BluePowerRobotics/road-runner.git
 if %errorlevel% equ 0 (
@@ -68,7 +79,19 @@ if %errorlevel% equ 0 (
     if exist "road-runner\" rd /s /q road-runner
     set "CLONED_FAILED=true"
 )
+)
 
+if exist "SwerveDrive\" (
+    echo SwerveDrive already exists, skipping clone.
+    if "!CLONED_FAILED!"=="false" (
+                echo Running link script...
+                cd SwerveDrive
+                call link.bat
+                cd ..
+            ) else (
+                echo Skipping link script because previous clones failed.
+            )
+) else (
 echo Cloning SwerveDrive repository...
 git clone https://bgithub.xyz/BluePowerRobotics/SwerveDrive.git
 if %errorlevel% equ 0 (
@@ -96,7 +119,7 @@ if %errorlevel% equ 0 (
     echo Error: Failed to clone SwerveDrive repository. Retry later please.
     if exist "SwerveDrive\" rd /s /q SwerveDrive
 )
-
+)
 echo All operations completed.
 echo CLONED_FAILED: !CLONED_FAILED!
 pause
