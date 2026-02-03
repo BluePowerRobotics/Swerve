@@ -1,0 +1,20 @@
+git clone https://bgithub.xyz/BluePowerRobotics/ftc-dashboard.git
+cd ftc-dashboard
+git remote set-url --push origin https://github.com/BluePowerRobotics/ftc-dashboard.git
+cd ..
+
+git clone https://bgithub.xyz/BluePowerRobotics/road-runner-ftc.git
+cd road-runner-ftc
+git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner-ftc.git
+cd ..
+
+git clone https://bgithub.xyz/BluePowerRobotics/road-runner.git
+cd road-runner
+git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner.git
+cd ..
+
+git clone https://bgithub.xyz/BluePowerRobotics/SwerveDrive.git
+cd SwerveDrive
+git remote set-url --push origin https://github.com/BluePowerRobotics/SwerveDrive.git
+chmod +x ./link
+./link
