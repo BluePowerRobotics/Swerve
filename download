@@ -1,3 +1,5 @@
+#
+
 CLONED_FAILED=false
 if command -v git &> /dev/null; then
   echo "git found, proceeding..."

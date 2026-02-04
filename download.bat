@@ -1,4 +1,6 @@
 @echo off
+:: 设置控制台为 UTF-8 编码
+chcp 65001 >nul 2>nul
 setlocal enabledelayedexpansion
 
 :: 检查 Git 是否安装
@@ -15,110 +17,111 @@ set "CLONED_FAILED=false"
 if exist "ftc-dashboard\" (
     echo ftc-dashboard already exists, skipping clone.
 ) else (
-echo Cloning ftc-dashboard repository...
-git clone https://bgithub.xyz/BluePowerRobotics/ftc-dashboard.git
-if %errorlevel% equ 0 (
-    if exist "ftc-dashboard\" (
-        echo ftc-dashboard cloned, setting remote...
-        cd ftc-dashboard
-        git remote set-url --push origin https://github.com/BluePowerRobotics/ftc-dashboard.git
-        cd ..
-        echo succeed.
+    echo Cloning ftc-dashboard repository...
+    git clone https://bgithub.xyz/BluePowerRobotics/ftc-dashboard.git
+    if !errorlevel! equ 0 (
+        if exist "ftc-dashboard\" (
+            echo ftc-dashboard cloned, setting remote...
+            cd ftc-dashboard
+            git remote set-url --push origin https://github.com/BluePowerRobotics/ftc-dashboard.git
+            cd ..
+            echo succeed.
+        ) else (
+            echo Error: Directory ftc-dashboard not created.
+            set "CLONED_FAILED=true"
+        )
     ) else (
-        echo Error: Directory ftc-dashboard not created.
+        echo Error: Failed to clone ftc-dashboard repository. Retry later please.
+        if exist "ftc-dashboard\" rd /s /q ftc-dashboard
         set "CLONED_FAILED=true"
     )
-) else (
-    echo Error: Failed to clone ftc-dashboard repository. Retry later please.
-    if exist "ftc-dashboard\" rd /s /q ftc-dashboard
-    set "CLONED_FAILED=true"
-)
 )
 
 if exist "road-runner-ftc\" (
     echo road-runner-ftc already exists, skipping clone.
 ) else (
-echo Cloning road-runner-ftc repository...
-git clone https://bgithub.xyz/BluePowerRobotics/road-runner-ftc.git
-if %errorlevel% equ 0 (
-    if exist "road-runner-ftc\" (
-        echo road-runner-ftc cloned, setting remote...
-        cd road-runner-ftc
-        git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner-ftc.git
-        cd ..
-        echo succeed.
+    echo Cloning road-runner-ftc repository...
+    git clone https://bgithub.xyz/BluePowerRobotics/road-runner-ftc.git
+    if !errorlevel! equ 0 (
+        if exist "road-runner-ftc\" (
+            echo road-runner-ftc cloned, setting remote...
+            cd road-runner-ftc
+            git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner-ftc.git
+            cd ..
+            echo succeed.
+        ) else (
+            echo Error: Directory road-runner-ftc not created.
+            set "CLONED_FAILED=true"
+        )
     ) else (
-        echo Error: Directory road-runner-ftc not created.
+        echo Error: Failed to clone road-runner-ftc repository. Retry later please.
+        if exist "road-runner-ftc\" rd /s /q road-runner-ftc
         set "CLONED_FAILED=true"
     )
-) else (
-    echo Error: Failed to clone road-runner-ftc repository. Retry later please.
-    if exist "road-runner-ftc\" rd /s /q road-runner-ftc
-    set "CLONED_FAILED=true"
-)
 )
 
 if exist "road-runner\" (
     echo road-runner already exists, skipping clone.
 ) else (
-echo Cloning road-runner repository...
-git clone https://bgithub.xyz/BluePowerRobotics/road-runner.git
-if %errorlevel% equ 0 (
-    if exist "road-runner\" (
-        echo road-runner cloned, setting remote...
-        cd road-runner
-        git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner.git
-        cd ..
-        echo succeed.
+    echo Cloning road-runner repository...
+    git clone https://bgithub.xyz/BluePowerRobotics/road-runner.git
+    if !errorlevel! equ 0 (
+        if exist "road-runner\" (
+            echo road-runner cloned, setting remote...
+            cd road-runner
+            git remote set-url --push origin https://github.com/BluePowerRobotics/road-runner.git
+            cd ..
+            echo succeed.
+        ) else (
+            echo Error: Directory road-runner not created.
+            set "CLONED_FAILED=true"
+        )
     ) else (
-        echo Error: Directory road-runner not created.
+        echo Error: Failed to clone road-runner repository. Retry later please.
+        if exist "road-runner\" rd /s /q road-runner
         set "CLONED_FAILED=true"
     )
-) else (
-    echo Error: Failed to clone road-runner repository. Retry later please.
-    if exist "road-runner\" rd /s /q road-runner
-    set "CLONED_FAILED=true"
-)
 )
 
 if exist "SwerveDrive\" (
     echo SwerveDrive already exists, skipping clone.
     if "!CLONED_FAILED!"=="false" (
+        echo Running link script...
+        cd SwerveDrive
+        call link.bat
+        cd ..
+    ) else (
+    echo Skipping link script because previous clones failed.
+    )
+) else (
+    echo Cloning SwerveDrive repository...
+    git clone https://bgithub.xyz/BluePowerRobotics/SwerveDrive.git
+    if !errorlevel! equ 0 (
+        if exist "SwerveDrive\" (
+            echo SwerveDrive cloned, setting remote...
+            cd SwerveDrive
+            git remote set-url --push origin https://github.com/BluePowerRobotics/SwerveDrive.git
+            echo succeed.
+            echo creating link...
+
+            rem 注意：批处理中布尔值比较
+            if "!CLONED_FAILED!"=="false" (
                 echo Running link script...
-                cd SwerveDrive
                 call link.bat
-                cd ..
             ) else (
                 echo Skipping link script because previous clones failed.
             )
-) else (
-echo Cloning SwerveDrive repository...
-git clone https://bgithub.xyz/BluePowerRobotics/SwerveDrive.git
-if %errorlevel% equ 0 (
-    if exist "SwerveDrive\" (
-        echo SwerveDrive cloned, setting remote...
-        cd SwerveDrive
-        git remote set-url --push origin https://github.com/BluePowerRobotics/SwerveDrive.git
-        echo succeed.
-        echo creating link...
 
-        rem 注意：批处理中布尔值比较
-        if "!CLONED_FAILED!"=="false" (
-            echo Running link script...
-            call link.bat
+            cd ..
         ) else (
-            echo Skipping link script because previous clones failed.
+            echo Error: Directory SwerveDrive not created.
+            if exist "SwerveDrive\" rd /s /q SwerveDrive
         )
-
-        cd ..
     ) else (
-        echo Error: Directory SwerveDrive not created.
+        echo Error: Failed to clone SwerveDrive repository. Retry later please.
         if exist "SwerveDrive\" rd /s /q SwerveDrive
+        set "CLONED_FAILED=true"
     )
-) else (
-    echo Error: Failed to clone SwerveDrive repository. Retry later please.
-    if exist "SwerveDrive\" rd /s /q SwerveDrive
-)
 )
 echo All operations completed.
 echo CLONED_FAILED: !CLONED_FAILED!
