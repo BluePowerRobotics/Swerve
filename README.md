@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains the downloader of all dependencies required to build the Swerve project.
+This repository contains the downloader of all roadrunner files used by the Swerve project.
 
 ## Usage
 
@@ -34,4 +34,4 @@ chmod +x ./download
 
 After executing the appropriate commands for your operating system, all necessary dependencies will be downloaded to the Swerve project directory.
 
-Use *Android Studio* to open the **SwerveDrive** directory and start working on the project.
+Use *Android Studio* to open the **SwerveDrive** directory and follow the direction in README.md.
